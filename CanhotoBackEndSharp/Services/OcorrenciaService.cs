@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CanhotoBackEndSharp.Models;
 using CanhotoBackEndSharp.Repositories;
+using CanhotoBackEndSharp.Models;
 
 namespace CanhotoBackEndSharp.Services
 {

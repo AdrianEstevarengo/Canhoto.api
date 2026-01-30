@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using System;
+using System.Linq;
 using CanhotoBackEndSharp.Services;
 using CanhotoBackEndSharp.Models;
+using CanhotoBackEndSharp.Dtos;
+using CanhotoBackEndSharp.Factories;
 
 namespace CanhotoBackEndSharp.Controllers
 {
@@ -16,14 +19,25 @@ namespace CanhotoBackEndSharp.Controllers
         public async Task<IActionResult> GetByEntrega(int entregaId)
         {
             var list = await _service.GetByEntregaIdAsync(entregaId);
-            return Ok(list);
+            var dto = CanhotoBackEndSharp.Factories.OcorrenciaFactory.ToDtoList(list);
+            return Ok(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Ocorrencia ocorrencia)
+        public async Task<IActionResult> PostAsync([FromBody] OcorrenciaDto ocorrenciaDto)
         {
+            var ocorrencia = new CanhotoBackEndSharp.Models.Ocorrencia
+            {
+                Descricao = ocorrenciaDto.Descricao,
+                Data = ocorrenciaDto.Data,
+                Tipo = Enum.TryParse<CanhotoBackEndSharp.Models.TipoOcorrencia>(ocorrenciaDto.Tipo, out var t) ? t : CanhotoBackEndSharp.Models.TipoOcorrencia.Informacao,
+                EntregaId = ocorrenciaDto.EntregaId
+            };
+
             await _service.AddAsync(ocorrencia);
-            return CreatedAtAction(nameof(GetByEntrega), new { entregaId = ocorrencia.EntregaId }, ocorrencia);
+
+            ocorrenciaDto.Id = ocorrencia.Id;
+            return CreatedAtAction(nameof(GetByEntrega), new { entregaId = ocorrenciaDto.EntregaId }, ocorrenciaDto);
         }
     }
 }
