@@ -16,7 +16,8 @@ namespace CanhotoBackEndSharp.Models
         public Usuario? Usuario { get; set; }
 
         public Canhoto? Canhoto { get; set; }
-
         public ICollection<Ocorrencia> Ocorrencias { get; set; } = new List<Ocorrencia>();
+
+        public ICollection<Acao> Acoes { get; set; } = new List<Acao>();
     }
 }

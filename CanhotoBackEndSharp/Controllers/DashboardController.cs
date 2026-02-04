@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using CanhotoBackEndSharp.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using CanhotoBackEndSharp.Services;
 
 namespace CanhotoBackEndSharp.Controllers
 {
@@ -9,17 +10,21 @@ namespace CanhotoBackEndSharp.Controllers
     [Route("api/[controller]")]
     public class DashboardController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
-        public DashboardController(ApplicationDbContext db) => _db = db;
+        private readonly DashboardService _service;
+        public DashboardController(DashboardService service) => _service = service;
 
         [HttpGet("summary")]
         public async Task<IActionResult> Summary()
         {
-            var totalEntregas = await _db.Entregas.CountAsync();
-            var entregues = await _db.Entregas.CountAsync(e => e.Status == Models.StatusEntrega.Entregue);
-            var pendentes = await _db.Entregas.CountAsync(e => e.Status == Models.StatusEntrega.Pendente);
+            var dto = await _service.GetSummaryAsync();
+            return Ok(dto);
+        }
 
-            return Ok(new { totalEntregas, entregues, pendentes });
+        [HttpGet("feed")]
+        public async Task<IActionResult> Feed()
+        {
+            var feed = await _service.GetFeedAsync();
+            return Ok(feed);
         }
     }
 }

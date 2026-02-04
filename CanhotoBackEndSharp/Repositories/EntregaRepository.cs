@@ -15,6 +15,35 @@ namespace CanhotoBackEndSharp.Repositories
             await _db.SaveChangesAsync();
         }
 
+        public async Task AddCanhotoAsync(Canhoto canhoto)
+        {
+            await _db.Canhotos.AddAsync(canhoto);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<int> CountEntregasHojeAsync()
+        {
+            var today = DateTime.Today;
+            return await _db.Entregas.CountAsync(e => e.DataPrevisao.Date == today);
+        }
+
+        public async Task<int> CountEntregasPendentesAsync()
+        {
+            return await _db.Entregas.CountAsync(e => e.Status == StatusEntrega.Pendente);
+        }
+
+        public async Task<int> CountEntregasAtrasadasAsync()
+        {
+            var today = DateTime.Today;
+            return await _db.Entregas.CountAsync(e => e.DataPrevisao.Date < today && e.Canhoto == null && e.Status != StatusEntrega.Cancelada);
+        }
+
+        public async Task<int> CountEntregasEntreguesHojeAsync()
+        {
+            var today = DateTime.Today;
+            return await _db.Canhotos.CountAsync(c => c.DataAssinatura.Date == today);
+        }
+
         public async Task<IEnumerable<Entrega>> GetAllAsync()
         {
             return await _db.Entregas.Include(e => e.Canhoto).Include(e => e.Ocorrencias).ToListAsync();

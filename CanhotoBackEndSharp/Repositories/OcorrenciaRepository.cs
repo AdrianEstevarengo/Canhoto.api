@@ -14,7 +14,7 @@ namespace CanhotoBackEndSharp.Repositories
         public async Task AddAsync(Ocorrencia ocorrencia)
         {
             await _db.Ocorrencias.AddAsync(ocorrencia);
-            await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(); // Ensuring changes are saved
         }
 
         public async Task<IEnumerable<Ocorrencia>> GetByEntregaIdAsync(int entregaId)

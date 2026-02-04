@@ -36,6 +36,8 @@ builder.Services.AddScoped<CanhotoBackEndSharp.Repositories.IEntregaRepository, 
 builder.Services.AddScoped<CanhotoBackEndSharp.Repositories.IOcorrenciaRepository, CanhotoBackEndSharp.Repositories.OcorrenciaRepository>();
 builder.Services.AddScoped<CanhotoBackEndSharp.Services.IEntregaService, CanhotoBackEndSharp.Services.EntregaService>();
 builder.Services.AddScoped<CanhotoBackEndSharp.Services.IOcorrenciaService, CanhotoBackEndSharp.Services.OcorrenciaService>();
+builder.Services.AddScoped<CanhotoBackEndSharp.Services.ICanhotoService, CanhotoBackEndSharp.Services.CanhotoService>();
+builder.Services.AddScoped<CanhotoBackEndSharp.Services.DashboardService>();
 
 var app = builder.Build();
 

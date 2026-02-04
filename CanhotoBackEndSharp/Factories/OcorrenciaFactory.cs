@@ -40,5 +40,16 @@ namespace CanhotoBackEndSharp.Factories
         {
             return list?.Select(ToDto).ToList() ?? new List<OcorrenciaDto>();
         }
+
+        public static List<FeedItemDto> ToFeedItems(IEnumerable<Ocorrencia> ocorrencias)
+        {
+            return ocorrencias?.Select(o => new FeedItemDto
+            {
+                Tipo = "Ocorrencia",
+                ReferenciaId = o.Id,
+                Resumo = o.Descricao,
+                CriadoEm = o.Data
+            }).ToList() ?? new List<FeedItemDto>();
+        }
     }
 }

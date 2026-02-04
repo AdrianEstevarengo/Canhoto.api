@@ -17,5 +17,7 @@ namespace CanhotoBackEndSharp.Dtos
         public CanhotoDto? Canhoto { get; set; }
 
         public List<OcorrenciaDto> Ocorrencias { get; set; } = new List<OcorrenciaDto>();
+        public List<AcaoDto> Acoes { get; set; } = new List<AcaoDto>();
+        public SlaInfoDto? SlaInfo { get; set; }
     }
 }
