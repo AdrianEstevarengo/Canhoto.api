@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using CanhotoBackEndSharp.Services;
-using CanhotoBackEndSharp.Models;
+using CanhotoBackEndSharp.Dtos;
 
 namespace CanhotoBackEndSharp.Controllers
 {
@@ -16,7 +16,8 @@ namespace CanhotoBackEndSharp.Controllers
         public async Task<IActionResult> GetAll()
         {
             var list = await _service.GetAllAsync();
-            return Ok(list);
+            var dtoList = CanhotoBackEndSharp.Factories.EntregaFactory.ToDtoList(list);
+            return Ok(dtoList);
         }
 
         [HttpGet("{id}")]
@@ -24,14 +25,17 @@ namespace CanhotoBackEndSharp.Controllers
         {
             var item = await _service.GetByIdAsync(id);
             if (item == null) return NotFound();
-            return Ok(item);
+            var dto = CanhotoBackEndSharp.Factories.EntregaFactory.ToDto(item);
+            return Ok(dto);
         }
-
+    
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Entrega entrega)
+        public async Task<IActionResult> Post([FromBody] EntregaDto entregaDto)
         {
-            await _service.AddAsync(entrega);
-            return CreatedAtAction(nameof(Get), new { id = entrega.Id }, entrega);
+            var entity = CanhotoBackEndSharp.Factories.EntregaFactory.ToEntity(entregaDto);
+            await _service.AddAsync(entity);
+            var dto = CanhotoBackEndSharp.Factories.EntregaFactory.ToDto(entity);
+            return CreatedAtAction(nameof(Get), new { id = dto.Id }, dto);
         }
     }
 }
